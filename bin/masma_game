@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/masma_game/game'
+require_relative '../lib/masma_game/next_game'
+require_relative '../lib/masma_game/blue_player'
+require_relative '../lib/masma_game/red_player'
+
+# player1 = Player.new("fola", 80)
+# player2 = Player.new("morounkeji", 50)
+# player3 = Player.new("bolaji", 70)
+
+game = MasmaGame::Game.new("chess")
+default_player_file = 
+  File.join(File.dirname(__FILE__), 'players.csv')
+game.load_players(ARGV.shift || default_player_file)
+
+# game.add_player(player1)
+# game.add_player(player2)
+#game.add_player(player3)
+# game.play(3)
+# game.print_stats
+
+blue = MasmaGame::BluePlayer.new("michel", 105)
+game.add_player(blue)
+
+red = MasmaGame::RedPlayer.new("red", 50)
+game.add_player(red)
+
+loop do
+  puts "\nHow many game rounds? (Type 'quit' to exit)"
+  answer = gets.chomp.downcase
+  case answer
+  when /^\d+$/
+    game.play(answer.to_i)
+  when 'quit', 'exit'
+    game.print_stats
+    break
+  else
+    puts "Please enter a number or type 'quit' to exit"
+  end
+end
+
+game.save_high_scores
+
+
